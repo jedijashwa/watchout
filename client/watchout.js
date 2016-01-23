@@ -1,12 +1,11 @@
-//var _enemyCount = 10;
-var enemy = [];
-for(var i=0; i<10; i++){
-  enemy.push({distance: 21 + i, inCollison: false});
-}
+var _enemyCount = 1;
+var data = [0, {distance: 21, inCollision: false}];
 
 var score = 0;
 var highscore = 0;
 var collisions = 0;
+var highlevel = 1;
+var level = 1;
 // start slingin' some d3 
 var svg = d3.select(".container").append('svg')
   .attr('width', 800)
@@ -29,16 +28,39 @@ svg.append('filter')
   .attr('height', '100%')
   .append('feImage')
   .attr('xlink:href', 'ninja.png');
+
+svg.append('filter')
+  .attr('id', 'background')
+  .attr('x', '-50%')
+  .attr('y', '0%')
+  .attr('width', '200%')
+  .attr('height', '200%')
+  .append('feImage')
+  .attr('xlink:href', 'bamboo.jpg')
  
 var background = svg.selectAll('rect').data([0]).enter()
   .append('rect')
-  .attr('fill', '#A7A7A9')
+  .attr('filter', 'url(#background)')
   .attr('width', '800px')
   .attr('height', '400px')
   .attr('rx', '10px')
   .attr('ry', '10px')
+  .style('opacity', '0.8');
 
-var enemys = svg.selectAll('circle').data(enemy).enter()
+
+var player = svg.selectAll('circle').data(data.slice(0,1)).enter()
+  .append('circle').attr('r', 10)
+  .attr('class', 'player')
+  .attr('filter', 'url(#hero_image)')
+  .attr('cx',-20)
+  .attr('cy',-20)
+  .call(d3.behavior.drag().on('drag', move));
+  
+player.transition().duration(2000)
+  .attr('cx',150)
+  .attr('cy',100)
+
+var enemys = svg.selectAll('circle').data(data).enter()
   .append('circle').attr('r', 10)
   .attr('class', 'enemy')
   .attr('cx',400)
@@ -46,32 +68,41 @@ var enemys = svg.selectAll('circle').data(enemy).enter()
   .attr('filter', 'url(#enemy_image)')
 
 
-
 var mobility = function(){
   score++;
   if (highscore < score){
     highscore = score;
   }
-  d3.select(".current").text("Current score: " + score);
-  d3.select(".high").text("High score: " + highscore);
-  enemys.transition().duration(1000)
+  if (score > 0 && !(score % 5)) {
+    level++;
+    if (highlevel < level){
+      highlevel = level;
+    }
+    data.push({distance: 21 + Math.random(), inCollision: false})
+    svg.append('circle')
+      .attr('class', 'enemy')
+      .attr('cx',400)
+      .attr('cy',200)
+      .attr('r', 10)
+      .attr('filter', 'url(#enemy_image)')
+      .data({distance: 21, inCollision: false})
+    
+    svg.selectAll('circle').data(data);
+  }
+  d3.select(".current").select('span').text(score);
+  d3.select(".high").select('span').text(highscore);
+  d3.select(".currentlevel").select('span').text(level);
+  d3.select(".highlevel").select('span').text(highlevel);
+  d3.selectAll('.enemy').transition().duration(1000)
   .attr('cx',function(d){return Math.random()*800})
   .attr('cy',function(d){return Math.random()*400})
   setTimeout(mobility, 1000)
 }
-
-var player = svg.selectAll('circle').data(Array(enemy.length+1)).enter()
-  .append('circle').attr('r', 10)
-  .attr('class', 'player')
-  .attr('filter', 'url(#hero_image)')
-  .attr('cx',400)
-  .attr('cy',200)
-  .call(d3.behavior.drag().on('drag', move));
   
-svg.selectAll('circle').data(enemy);
+svg.selectAll('circle').data(data);
 
 var detect = function(){
-  enemys.each(function (d) {
+   d3.selectAll('.enemy').each(function (d) {
     var x1 = d3.select(this).attr('cx'),
         y1 = d3.select(this).attr('cy'),
         x2 = player.attr('cx'),
@@ -81,16 +112,31 @@ var detect = function(){
     if(d.distance <= 20){
       if (!d.inCollision) {
         collisions++;
-        d3.select(".collisions").text("Collisions: " + collisions);
+        d3.select(".collisions").select('span').text(collisions);
         d.inCollision = true;
       }
+      level = 1;
       score = 0;
-      d3.select(".current").text("Current score: " + score);
+      svg.selectAll('.enemy').remove();
+      svg.append('circle')
+        .attr('class', 'enemy')
+        .attr('cx',400)
+        .attr('cy',200)
+        .attr('r', 10)
+        .attr('filter', 'url(#enemy_image)')
+        .data({distance: 21, inCollision: false})
+      
+      data = [0, {distance: 21, inCollision: false}];
+      
+      svg.selectAll('circle').data(data);
+        
+      d3.select(".current").select('span').text(score);
+      d3.select(".currentlevel").select('span').text(level);
     } else {
       d.inCollision = false;
     }
   });
-  setTimeout(detect, 10);
+  setTimeout(detect, 80);
 }
 
 

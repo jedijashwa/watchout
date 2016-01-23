@@ -5,9 +5,9 @@ Feel free to use it if you like. */
 
 .scoreboard {
   position: absolute;
-  width: 105;
+  width: 105px;
   top: 15px;
-  left: 715px;
+  left: 695px;
   text-align: right;
   font-family: sans-serif;
   font-size: 12px;
