@@ -31,22 +31,22 @@ svg.append('filter')
 
 svg.append('filter')
   .attr('id', 'background')
-  .attr('x', '-50%')
+  .attr('x', '0%')
   .attr('y', '0%')
-  .attr('width', '200%')
-  .attr('height', '200%')
+  .attr('width', '100%')
+  .attr('height', '100%')
   .append('feImage')
-  .attr('xlink:href', 'bamboo.jpg')
+  .attr('xlink:href', 'bamboo_back.jpg')
+
  
-var background = svg.selectAll('rect').data([0]).enter()
+var background = svg.selectAll('rect').data([0, 1]).enter()
   .append('rect')
   .attr('filter', 'url(#background)')
   .attr('width', '800px')
   .attr('height', '400px')
-  .attr('rx', '10px')
-  .attr('ry', '10px')
-  .style('opacity', '0.8');
-
+  .style('opacity', '0.5')
+  .attr('rx', '20px')
+  .attr('ry', '20px')
 
 var player = svg.selectAll('circle').data(data.slice(0,1)).enter()
   .append('circle').attr('r', 10)
@@ -150,6 +150,8 @@ function move () {
       return 788;
     } else if (target.attr('cx') <= 10) {
       return 12;
+    } else if(target.attr('cx') > 670 && target.attr('cy') < 90 ){
+      return 665
     }
     return d3.event.dx + parseFloat(target.attr('cx')); })
   target.attr('cy', function () {
@@ -157,6 +159,11 @@ function move () {
       return 388;
     } else if (target.attr('cy') <= 10) {
       return 12;
+    } else if(target.attr('cx') > 680 && target.attr('cy') < 100 ){
+      return 105;
     }
     return d3.event.dy + parseFloat(target.attr('cy')); })
 }
+ 
+
+

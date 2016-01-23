@@ -6,11 +6,15 @@ Feel free to use it if you like. */
 .scoreboard {
   position: absolute;
   width: 105px;
+  height: 70px;
   top: 15px;
-  left: 695px;
+  left: 685px;
   text-align: right;
   font-family: sans-serif;
   font-size: 12px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .enemy {
