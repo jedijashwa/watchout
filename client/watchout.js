@@ -11,11 +11,20 @@ var svg = d3.select(".container").append('svg')
   .attr('width', 800)
   .attr('height', 400);
 
+var background = svg.selectAll('rect').data([0]).enter()
+  .append('rect')
+  .attr('fill', '#A7A7A9')
+  .attr('width', '790px')
+  .attr('height', '400px')
+  .attr('rx', '10px')
+  .attr('ry', '10px')
+
 var enemys = svg.selectAll('circle').data(enemy).enter()
   .append('circle').attr('r', 10)
   .attr('class', 'enemy')
   .attr('cx',400)
-  .attr('cy',200);
+  .attr('cy',200)
+  .attr('fill', '#453F3C');
 
 var mobility = function(){
   score++;
@@ -33,9 +42,12 @@ var mobility = function(){
 var player = svg.selectAll('circle').data(Array(enemy.length+1)).enter()
   .append('circle').attr('r', 10)
   .attr('class', 'player')
-  .attr('fill', 'blue')
+  .attr('fill', '#C1EDCC')
   .attr('cx',400)
   .attr('cy',200)
+  
+  
+
 
 var detect = function(){
   enemys.each(function (d) { 
@@ -56,3 +68,4 @@ var detect = function(){
 
 mobility();
 detect();
+
