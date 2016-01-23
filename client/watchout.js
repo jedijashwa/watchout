@@ -4,6 +4,8 @@ for(var i=0; i<10; i++){
   enemy.push(i);
 }
 
+var score = 0;
+var highscore = 0;
 // start slingin' some d3 
 var svg = d3.select(".container").append('svg')
   .attr('width', 800)
@@ -16,6 +18,12 @@ var enemys = svg.selectAll('circle').data(enemy).enter()
   .attr('cy',200);
 
 var mobility = function(){
+  score++;
+  if (highscore < score){
+    highscore = score;
+  }
+  d3.select(".current").text("Current score: " + score);
+  d3.select(".high").text("High score: " + highscore);
   enemys.transition().duration(1000)
   .attr('cx',function(d){return Math.random()*800})
   .attr('cy',function(d){return Math.random()*400})
@@ -38,7 +46,8 @@ var detect = function(){
     
     var distance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
     if(distance<20){
-      console.log("hit")
+      score = 0;
+      d3.select(".current").text("Current score: " + score);
     }
   });
   setTimeout(detect, 10);
