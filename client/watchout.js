@@ -1,11 +1,12 @@
 //var _enemyCount = 10;
 var enemy = [];
 for(var i=0; i<10; i++){
-  enemy.push(i);
+  enemy.push({distance: 21 + i, inCollison: false});
 }
 
 var score = 0;
 var highscore = 0;
+var collisions = 0;
 // start slingin' some d3 
 var svg = d3.select(".container").append('svg')
   .attr('width', 800)
@@ -45,21 +46,28 @@ var player = svg.selectAll('circle').data(Array(enemy.length+1)).enter()
   .attr('fill', '#C1EDCC')
   .attr('cx',400)
   .attr('cy',200)
+  .call(d3.behavior.drag().on('drag', move));
   
-  
-
+svg.selectAll('circle').data(enemy);
 
 var detect = function(){
-  enemys.each(function (d) { 
+  enemys.each(function (d) {
     var x1 = d3.select(this).attr('cx'),
         y1 = d3.select(this).attr('cy'),
         x2 = player.attr('cx'),
         y2 = player.attr('cy');
-    
-    var distance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-    if(distance<20){
+        
+    d.distance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+    if(d.distance <= 20){
+      if (!d.inCollision) {
+        collisions++;
+        d3.select(".collisions").text("Collisions: " + collisions);
+        d.inCollision = true;
+      }
       score = 0;
       d3.select(".current").text("Current score: " + score);
+    } else {
+      d.inCollision = false;
     }
   });
   setTimeout(detect, 10);
@@ -67,5 +75,12 @@ var detect = function(){
 
 
 mobility();
-detect();
+setTimeout(detect, 1000);
 
+function move () {
+  var target = d3.select(this);
+  target.attr('cx', function () {
+    return d3.event.dx + parseFloat(target.attr('cx')); })
+  target.attr('cy', function () {
+    return d3.event.dy + parseFloat(target.attr('cy')); })
+}
