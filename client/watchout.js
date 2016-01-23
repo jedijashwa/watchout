@@ -12,10 +12,19 @@ var svg = d3.select(".container").append('svg')
   .attr('width', 800)
   .attr('height', 400);
 
+svg.append('filter')
+  .attr('id', 'enemy_image')
+  .attr('x', '0%')
+  .attr('y', '0%')
+  .attr('width', '100%')
+  .attr('height', '100%')
+  .append('feImage')
+  .attr('xlink:href', 'shuriken.png');
+ 
 var background = svg.selectAll('rect').data([0]).enter()
   .append('rect')
   .attr('fill', '#A7A7A9')
-  .attr('width', '790px')
+  .attr('width', '800px')
   .attr('height', '400px')
   .attr('rx', '10px')
   .attr('ry', '10px')
@@ -25,7 +34,9 @@ var enemys = svg.selectAll('circle').data(enemy).enter()
   .attr('class', 'enemy')
   .attr('cx',400)
   .attr('cy',200)
-  .attr('fill', '#453F3C');
+  .attr('filter', 'url(#enemy_image)')
+
+
 
 var mobility = function(){
   score++;
