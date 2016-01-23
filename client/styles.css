@@ -25,4 +25,18 @@ Feel free to use it if you like. */
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 
-    
+.player {
+    -webkit-animation:herospin 1s linear infinite;
+    -moz-animation:herospin 1s linear infinite;
+    animation:herospin 1s linear infinite;
+    transform-origin: 50% 50%;
+}
+
+@-moz-keyframes herospin { 100% { -moz-transform: rotate(0deg); }
+                           50% { -moz-transform: rotate(75deg); } }
+@-webkit-keyframes herospin { 100% { -webkit-transform: rotate(0deg);}
+                              50% { -webkit-transform: rotate(75deg); } }
+@keyframes herospin { 100% { transform:rotate(0deg); } 
+                      50%  { transform:rotate(75deg);}}
+
+

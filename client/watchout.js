@@ -20,6 +20,15 @@ svg.append('filter')
   .attr('height', '100%')
   .append('feImage')
   .attr('xlink:href', 'shuriken.png');
+  
+svg.append('filter')
+  .attr('id', 'hero_image')
+  .attr('x', '0%')
+  .attr('y', '0%')
+  .attr('width', '100%')
+  .attr('height', '100%')
+  .append('feImage')
+  .attr('xlink:href', 'ninja.png');
  
 var background = svg.selectAll('rect').data([0]).enter()
   .append('rect')
@@ -54,7 +63,7 @@ var mobility = function(){
 var player = svg.selectAll('circle').data(Array(enemy.length+1)).enter()
   .append('circle').attr('r', 10)
   .attr('class', 'player')
-  .attr('fill', '#C1EDCC')
+  .attr('filter', 'url(#hero_image)')
   .attr('cx',400)
   .attr('cy',200)
   .call(d3.behavior.drag().on('drag', move));
