@@ -91,7 +91,17 @@ setTimeout(detect, 1000);
 function move () {
   var target = d3.select(this);
   target.attr('cx', function () {
+    if (target.attr('cx') >= 790) {
+      return 788;
+    } else if (target.attr('cx') <= 10) {
+      return 12;
+    }
     return d3.event.dx + parseFloat(target.attr('cx')); })
   target.attr('cy', function () {
+    if (target.attr('cy') >= 390) {
+      return 388;
+    } else if (target.attr('cy') <= 10) {
+      return 12;
+    }
     return d3.event.dy + parseFloat(target.attr('cy')); })
 }
