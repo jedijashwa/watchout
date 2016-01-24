@@ -136,12 +136,7 @@ var detect = function(){
       d.inCollision = false;
     }
   });
-  setTimeout(detect, 80);
 }
-
-
-mobility();
-setTimeout(detect, 1000);
 
 function move () {
   var target = d3.select(this);
@@ -165,5 +160,6 @@ function move () {
     return d3.event.dy + parseFloat(target.attr('cy')); })
 }
  
-
+mobility();
+d3.timer(detect);
 
